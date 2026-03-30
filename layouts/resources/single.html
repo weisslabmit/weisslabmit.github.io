@@ -1,0 +1,13 @@
+{{ define "main" }}
+<section class="resources-redirect">
+  <meta http-equiv="refresh" content="0;url={{ .Params.link | default .RelPermalink }}">
+  <p>Redirecting to <a href="{{ .Params.link | default .RelPermalink }}">{{ .Title }}</a>…</p>
+  <script>
+    // JS fallback for browsers that ignore meta refresh
+    window.location.href = {{ printf "%q" (.Params.link | default .RelPermalink) }};
+  </script>
+  <noscript>
+    <p><a href="{{ .Params.link | default .RelPermalink }}">Click here if you are not redirected.</a></p>
+  </noscript>
+</section>
+{{ end }}

@@ -1,0 +1,225 @@
+<!-- Footer -->
+<footer class="wrapper style1 align-center">
+    <div class="inner">
+      
+        <p>Copiright Weiss lab 2025, designed by Gustavo Aguilar</p>
+</div>
+</footer>
+
+<script>
+(function () {
+  const nav = document.getElementById('floating-nav');
+  if (!nav) return;
+
+  const inner  = nav.querySelector('.floating-nav__inner') || nav;
+  const links  = Array.from(nav.querySelectorAll('a[data-scroll]'));
+
+  // Normalize any href to a plain "#id" (works for "#id", "/#id", "https://.../#id")
+  function getHash(a) {
+    try {
+      const raw = a.getAttribute('href') || '';
+      if (!raw) return '';
+      if (raw.startsWith('#')) return raw;                        // "#id"
+      const url = new URL(raw, window.location.origin);           // "/#id" or absolute
+      return url.hash || '';
+    } catch { return ''; }
+  }
+
+  // Build list of target IDs and sections
+  const hashes = links.map(getHash).filter(h => h && h.length > 1);
+  const ids    = hashes.map(h => h.slice(1));
+  const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
+
+  const banner = document.getElementById('banner');
+
+  /* --- Show/hide nav based on banner visibility --- */
+  function showNav() { nav.classList.add('is-visible'); }
+  function hideNav() { nav.classList.remove('is-visible'); }
+
+  if (banner) {
+    const vis = new IntersectionObserver(([entry]) => {
+      if (entry && entry.isIntersecting && entry.intersectionRatio > 0.2) hideNav();
+      else showNav();
+    }, { threshold: [0, 0.2, 0.4] });
+    vis.observe(banner);
+  } else {
+    showNav();
+  }
+
+  /* =========================================================
+     FIX: dynamic nav height -> CSS variable (phones wrap to 2 lines)
+     This prevents anchored sections from being covered by the bar.
+  ========================================================== */
+  function updateNavHeightVar() {
+    // Measure the element that actually wraps (inner), not the outer fixed bar
+    const h = Math.ceil(inner.getBoundingClientRect().height);
+
+    // Keep both vars in sync (you use both names in CSS in places)
+    document.documentElement.style.setProperty('--menu-height', h + 'px');
+    document.documentElement.style.setProperty('--floating-nav-h', h + 'px');
+  }
+
+  // Initial measurement
+  updateNavHeightVar();
+
+  // Re-measure on viewport changes
+  window.addEventListener('resize', updateNavHeightVar, { passive: true });
+  window.addEventListener('orientationchange', updateNavHeightVar, { passive: true });
+
+  // Fonts can change wrapping after first paint
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(updateNavHeightVar);
+  }
+
+  // Best: observe actual size changes of the inner bar (wrap/unwrap)
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(updateNavHeightVar).observe(inner);
+  } else {
+    // Fallback: a couple delayed passes
+    setTimeout(updateNavHeightVar, 50);
+    setTimeout(updateNavHeightVar, 250);
+  }
+
+  /* --- Active link helpers --- */
+  function setActiveByHash(hash) {
+    let any = false;
+    links.forEach(a => {
+      const active = (getHash(a) === hash);
+      a.classList.toggle('is-active', active);
+      any = any || active;
+    });
+    nav.classList.toggle('has-active', any);   // <-- class is on #floating-nav in your CSS
+  }
+
+  function setActive(id) {
+    setActiveByHash('#' + id);
+  }
+
+  /* --- Scroll spy (mid-viewport = active) --- */
+  const spy = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) setActive(entry.target.id);
+    });
+  }, {
+    rootMargin: '-45% 0px -45% 0px',
+    threshold: 0
+  });
+  sections.forEach(sec => spy.observe(sec));
+
+  /* --- Initialize from current URL and keep in sync on hash changes --- */
+  setActiveByHash(window.location.hash || '');
+  window.addEventListener('hashchange', () => setActiveByHash(window.location.hash || ''));
+})();
+</script>
+
+
+
+<script>
+(function () {
+  const wrap   = document.getElementById('research-timeline');
+  const iframe = document.getElementById('lab-timeline');
+  if (!wrap || !iframe) return;
+
+  let fired = false;
+
+  const io = new IntersectionObserver(([entry]) => {
+    if (fired || !entry) return;
+
+    // Fire as soon as ANY pixel of the timeline frame is visible
+    if (entry.isIntersecting && entry.intersectionRatio > 0) {
+      fired = true;
+
+      // 1) Show spinner overlay immediately
+      wrap.classList.add('is-loading');
+
+      // 2) Kick the iframe load if still blank
+      const url = iframe.getAttribute('data-src');
+      if (iframe.src === 'about:blank' && url) iframe.src = url;
+
+      // 3) Keep spinner for 2s, then fade it out (CSS handles fade)
+      setTimeout(() => {
+        wrap.classList.remove('is-loading');
+      }, 2000);
+
+      io.disconnect();
+    }
+  }, { threshold: [0] });
+
+  io.observe(wrap);
+})();
+</script>
+
+
+<script>
+(function () {
+  function smoothScrollTo(selector) {
+    const el = document.querySelector(selector);
+    if (!el) return;
+    // Your CSS anchor-offset trick handles the fixed nav, so a simple scroll is fine:
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  window.addEventListener("message", (e) => {
+    // only accept messages from our own origin (same-origin iframe)
+    if (e.origin !== window.location.origin) return;
+    const data = e.data || {};
+    if (data.type === "lab-nav" && typeof data.target === "string") {
+      smoothScrollTo(data.target);
+    }
+  });
+})();
+</script>
+
+<script>
+(function() {
+  const fab = document.querySelector('.recruiting-fab');
+  if (!fab) return; // not on home or no active opportunities
+
+  const banner = document.getElementById('banner');
+  if (!banner) { fab.classList.remove('is-active'); return; }
+
+  // Create a tiny sentinel at the bottom of the banner
+  const sentinel = document.createElement('div');
+  sentinel.setAttribute('aria-hidden', 'true');
+  sentinel.style.cssText = 'position:absolute; left:0; bottom:0; width:1px; height:1px;';
+  if (getComputedStyle(banner).position === 'static') {
+    banner.style.position = 'relative';
+  }
+  banner.appendChild(sentinel);
+
+  const io = new IntersectionObserver(([entry]) => {
+    fab.classList.toggle('is-active', entry.isIntersecting);
+  }, { root: null, threshold: 0, rootMargin: '0px' });
+
+  io.observe(sentinel);
+
+  // Initial state
+  fab.classList.toggle('is-active', sentinel.getBoundingClientRect().top < window.innerHeight);
+})();
+</script>
+
+
+<script>
+(function () {
+  const track = document.querySelector('[data-lab-track]');
+  if (!track) return;
+
+  // Only shuffle the first half (original set), then re-duplicate for looping
+  const items = Array.from(track.children);
+  const half = items.length / 2;
+  if (!Number.isInteger(half) || half < 2) return;
+
+  const first = items.slice(0, half);
+
+  // Fisher-Yates shuffle
+  for (let i = first.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [first[i], first[j]] = [first[j], first[i]];
+  }
+
+  // Rebuild track: shuffled first + cloned second
+  track.innerHTML = '';
+  first.forEach(el => track.appendChild(el));
+  first.forEach(el => track.appendChild(el.cloneNode(true)));
+})();
+</script>

@@ -1,0 +1,139 @@
+backend:
+  name: github
+  repo: weisslabmit/lab-website
+  branch: main
+  base_url: https://weisslab-cms-oauth.onrender.com
+  auth_endpoint: /auth
+
+media_folder: "static/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "people"
+    label: "People"
+    folder: "content/people"
+    extension: "md"
+    create: true
+    slug: "{{slug}}"
+    defaults:
+      - scope: {}
+        values:
+          draft: false
+    format: "frontmatter"
+    sortable_fields: ["title", "role", "weight"]
+    fields:
+      - { label: "Name", name: "title", widget: "string" }
+      - label: "Role"
+        name: "role"
+        widget: "select"
+        options:
+          - { label: "PI", value: "PI" }
+          - { label: "Staff", value: "Staff" }
+          - { label: "PhD student", value: "PhD" }
+          - { label: "Postdoc", value: "Postdoc" }
+          - { label: "Other", value: "Other" }
+          - { label: "Undergrad", value: "Undergrad" }
+        default: "Other"
+      - { label: "Precise position or Graduate School", name: "position_detail", widget: "string", required: false, hint: "Shown under the name instead of Role (e.g., 'PhD student, Harvard-MIT HST')." }
+      - { label: "Co-supervised by", name: "co_supervised_by", widget: "string", required: false }
+      - { label: "Email", name: "email", widget: "string", required: false }
+      - { label: "Website URL", name: "website", widget: "string", required: false }
+      - { label: "Google Scholar URL", name: "scholar", widget: "string", required: false }
+      - { label: "GitHub URL", name: "github", widget: "string", required: false }
+      - { label: "ORCID URL", name: "orcid", widget: "string", required: false }
+      - { label: "LinkedIn", name: "linkedin", widget: "string", required: false }
+      - { label: "Photo", name: "image", widget: "image", required: false }
+      # Education
+      - { label: "PhD University", name: "phd_university", widget: "string", required: false }
+      - { label: "PhD Date", name: "phd_date", widget: "string", required: false }
+      - { label: "BS University", name: "bs_university", widget: "string", required: false }
+      - { label: "BS Date", name: "bs_date", widget: "string", required: false }
+      # Experience & Bio
+      - { label: "Other experience (Markdown)", name: "experience", widget: "markdown", required: false }
+      - { label: "Bio (Markdown)", name: "bio", widget: "markdown", required: false }
+      - { label: "Weight (order within role)", name: "weight", widget: "number", required: false, default: 10 }
+      - { label: "Short Bio", name: "short_bio", widget: "text", required: false, hint: "Appears next to photo in the People page" }
+
+
+
+
+  - name: "research"
+    label: "Research Topics"
+    folder: "content/research"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Weight (order)", name: "weight", widget: "number", default: 1, min: 1, step: 1, required: false }
+      - { label: "Summary", name: "summary", widget: "text", required: false }
+      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Body", name: "body", widget: "markdown", required: false }
+
+
+  - name: "alumni"
+    label: "Alumni"
+    folder: "content/alumni"
+    create: true
+    slug: "{{slug}}"
+    media_folder: "/static/uploads/alumni"
+    public_folder: "/uploads/alumni"
+    fields:
+      - { label: "Name", name: "title", widget: "string" }
+      - { label: "Alumni Category", name: "alumni_category", widget: "select",
+          options: ["Graduate Alumni", "Postdoctoral Alumni", "Undergraduate Alumni", "Other Alumni"] }
+      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Weight (order)", name: "weight", widget: "number", required: false, hint: "Lower appears first" }
+
+  - name: "resources"
+    label: "Resources"
+    folder: "content/resources"
+    extension: "md"
+    create: true
+    slug: "{{slug}}"
+    format: "frontmatter"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Image (icon)", name: "image", widget: "image", hint: "Square PNG/SVG preferred. Stored under /uploads/resources/." }
+      - label: "Description"
+        name: "description"
+        widget: "text"
+        hint: "Keep it ≤ 30 words."
+        pattern:
+          - "^(\\s*\\S+\\s*){0,30}$"
+          - "Please keep the description to 30 words or fewer."
+      - label: "Link"
+        name: "link"
+        widget: "string"
+        hint: "Full URL to the resource (https://…)"
+        pattern:
+          - "^(https?:)?//[\\w.-].+"
+          - "Enter a valid URL starting with http(s)://"
+      - { label: "Weight (order)", name: "weight", widget: "number", required: false, hint: "Lower = earlier" }
+
+  - name: "opportunities"
+    label: "Active Opportunities"
+    folder: "content/opportunities"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "body", widget: "markdown" }
+      - { label: "Link URL (optional)", name: "link", widget: "string", required: false }
+      - { label: "Draft", name: "draft", widget: "boolean", default: false }
+
+  - name: "lab_photos"
+    label: "Lab Photos"
+    files:
+      - name: "lab_photos_data"
+        label: "Lab Photos Gallery"
+        file: "data/lab_photos.yaml"
+        fields:
+          - { label: "Title", name: "title", widget: "string", required: false }
+          - label: "Photos"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Image", name: "image", widget: "image" }
+              - { label: "Alt text", name: "alt", widget: "string", required: false }

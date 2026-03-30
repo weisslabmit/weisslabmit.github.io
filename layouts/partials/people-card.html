@@ -1,0 +1,36 @@
+{{/* ========= PEOPLE CARD PARTIAL ========= */}}
+{{- $page := . -}}
+
+<article class="person-card">
+  <a class="image avatar" href="{{ $page.RelPermalink }}">
+    {{ with $page.Params.image }}
+      <img src="{{ . | relURL }}" alt="{{ $page.Title }}" loading="lazy">
+    {{ else }}
+      <img src="/uploads/placeholder.png" alt="{{ $page.Title }}" loading="lazy">
+    {{ end }}
+  </a>
+
+  <h3><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
+
+<div class="person-subtitle">
+  {{ if $page.Params.position_detail }}
+    {{ $page.Params.position_detail }}
+  {{ else }}
+    {{ if $page.Params.role }}
+      {{ $page.Params.role }}
+    {{ end }}
+  {{ end }}
+</div>
+  {{ with $page.Params.co_supervised_by }}
+    <div class="co-supervised">(Co-supervised by {{ . }})</div>
+  {{ end }}
+
+  <div class="person-links">
+    {{ with $page.Params.website  }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="Website">{{ partial "icons/link.svg" . }}</a>{{ end }}
+    {{ with $page.Params.scholar  }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="Google Scholar">{{ partial "icons/scholar.svg" . }}</a>{{ end }}
+    {{ with $page.Params.github   }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="GitHub">{{ partial "icons/github.svg" . }}</a>{{ end }}
+    {{ with $page.Params.orcid    }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="ORCID">{{ (partial "icons/orcid.svg" .) | safeHTML }}</a>{{ end }}
+    {{ with $page.Params.linkedin }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="LinkedIn">{{ partial "icons/linkedin.svg" . }}</a>{{ end }}
+    {{ with $page.Params.email    }}<a href="mailto:{{ . }}" aria-label="Email">{{ partial "icons/email.svg" . }}</a>{{ end }}
+  </div>
+</article>

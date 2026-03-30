@@ -1,0 +1,27 @@
+{{ define "main" }}
+<section id="research" class="spotlights">
+  {{ range .Pages.ByWeight }}
+  <section>
+    <a href="{{ .RelPermalink }}" class="image">
+      {{ $img := .Params.image }}
+      {{ if $img }}
+        <img src="{{ $img | relURL }}" alt="{{ .Title }}" />
+      {{ else }}
+        <img src="{{ "images/pic01.jpg" | relURL }}" alt="{{ .Title }}" />
+      {{ end }}
+    </a>
+    <div class="content">
+      <div class="inner">
+        <header class="major">
+          <h3>{{ .Title }}</h3>
+        </header>
+        {{ with .Params.summary }}<p>{{ . }}</p>{{ end }}
+        <ul class="actions">
+          <li><a href="{{ .RelPermalink }}" class="button">Learn more</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  {{ end }}
+</section>
+{{ end }}

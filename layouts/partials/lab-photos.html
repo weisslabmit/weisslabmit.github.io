@@ -1,0 +1,32 @@
+<section id="lab-photos" class="wrapper style1 align-center lab-photos-section">
+  <div class="inner">
+   
+
+    {{ $g := site.Data.lab_photos }}
+    {{ $items := $g.items | default (slice) }}
+
+    {{ if gt (len $items) 0 }}
+      <div class="lab-carousel" data-lab-carousel>
+        <div class="lab-carousel__track" data-lab-track>
+          {{ range $items }}
+            <a class="lab-carousel__item" href="/lab-photos/" aria-label="{{ .alt | default "Lab photo" }}">
+              <img src="{{ .image }}" alt="{{ .alt | default "Lab photo" }}" loading="lazy" />
+            </a>
+          {{ end }}
+          {{/* duplicate once for seamless loop */}}
+          {{ range $items }}
+            <a class="lab-carousel__item" href="/lab-photos/" aria-label="{{ .alt | default "Lab photo" }}">
+              <img src="{{ .image }}" alt="{{ .alt | default "Lab photo" }}" loading="lazy" />
+            </a>
+          {{ end }}
+        </div>
+      </div>
+
+      <ul class="actions">
+        <li><a class="button" href="/lab-photos/">All lab photos</a></li>
+      </ul>
+    {{ else }}
+      <p>No photos yet.</p>
+    {{ end }}
+  </div>
+</section>

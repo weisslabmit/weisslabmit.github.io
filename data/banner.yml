@@ -1,0 +1,9 @@
+style: style1 orient-left content-align-left image-position-right fullscreen
+  onload-image-fade-in onload-content-fade-right
+title: The Weiss Lab @MIT
+subtitle: null
+content: ""
+button:
+  label: ""
+  link: "#"
+image: ""

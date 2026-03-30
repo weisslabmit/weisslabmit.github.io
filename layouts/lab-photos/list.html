@@ -1,0 +1,69 @@
+{{ define "main" }}
+<main id="lab-photos-page" class="container">
+  <a href="/" class="back-to-home-btn">Back to Home</a>
+
+  <div class="inner">
+    <header class="major">
+      <h1>Fun</h1>
+      <p>A repository of lab images. Click any photo to view fullscreen.</p>
+    </header>
+
+    {{ $g := site.Data.lab_photos }}
+    {{ $items := $g.items | default (slice) }}
+
+    {{ if gt (len $items) 0 }}
+      <div class="lab-grid" data-lab-grid>
+        {{ range $i, $it := $items }}
+          <button class="lab-thumb" type="button"
+            data-src="{{ $it.image }}"
+            data-alt="{{ $it.alt | default "Lab photo" }}">
+            <img src="{{ $it.image }}" alt="{{ $it.alt | default "Lab photo" }}" loading="lazy" />
+          </button>
+        {{ end }}
+      </div>
+
+      <div class="lab-lightbox" data-lab-lightbox aria-hidden="true">
+        <button class="lab-lightbox__close" type="button" aria-label="Close">×</button>
+        <img class="lab-lightbox__img" alt="" />
+      </div>
+
+      <script>
+      (function () {
+        const grid = document.querySelector('[data-lab-grid]');
+        const box  = document.querySelector('[data-lab-lightbox]');
+        if (!grid || !box) return;
+
+        const img  = box.querySelector('.lab-lightbox__img');
+        const close = box.querySelector('.lab-lightbox__close');
+
+        function open(src, alt) {
+          img.src = src;
+          img.alt = alt || 'Lab photo';
+          box.classList.add('is-open');
+          box.setAttribute('aria-hidden', 'false');
+        }
+        function shut() {
+          box.classList.remove('is-open');
+          box.setAttribute('aria-hidden', 'true');
+          img.src = '';
+          img.alt = '';
+        }
+
+        grid.addEventListener('click', (e) => {
+          const btn = e.target.closest('.lab-thumb');
+          if (!btn) return;
+          open(btn.dataset.src, btn.dataset.alt);
+        });
+
+        close.addEventListener('click', shut);
+        box.addEventListener('click', (e) => { if (e.target === box) shut(); });
+        window.addEventListener('keydown', (e) => { if (e.key === 'Escape') shut(); });
+      })();
+      </script>
+
+    {{ else }}
+      <p>No photos yet.</p>
+    {{ end }}
+  </div>
+</main>
+{{ end }}

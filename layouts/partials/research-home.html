@@ -1,0 +1,56 @@
+<section id="research" class="wrapper">
+  <!-- Anchor the nav should jump to (just above the timeline) -->
+  <div id="research-top" aria-hidden="true"></div>
+    <header class="major">
+    <h2>The Weiss Lab Highlights</h2>
+  </header>
+  <!-- The timeline wrapper you observe for the spinner -->
+  <div id="research-timeline" class="timeline-frame">
+     
+      <div class="timeline-frame__loader" aria-hidden="true" role="status">
+      <img class="timeline-frame__spinner" src='{{ "plasmid.svg" | relURL }}' alt="">
+      </div>
+      
+    <iframe
+      id="lab-timeline"
+      src="about:blank"
+      data-src='{{ "embeds/timeline-lab/index.html" | relURL }}?v={{ now.Unix }}'
+      title="Lab Timeline"
+      loading="lazy"
+      referrerpolicy="no-referrer"
+      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+      scrolling="no">
+    </iframe>
+
+
+  
+  </div>
+
+
+<!-- ===== Research projects header + dynamic subsections ===== -->
+<header class="major align-center">
+  <h2>Current Projects</h2>
+</header>
+
+{{ with site.GetPage "section" "research" }}
+  {{ range $i, $p := .Pages.ByWeight }}
+    {{ $orient := cond (modBool $i 2) "orient-right" "orient-left" }}
+
+    <section class="spotlight style1 {{ $orient }} onload-content-fade-in onload-image-fade-in">
+      <div class="content">
+        <h2 class="major">{{ $p.Title }}</h2>
+        {{ with $p.Params.summary }}<p>{{ . }}</p>{{ end }}
+        <a href="{{ $p.RelPermalink }}" class="special">Learn more</a>
+      </div>
+
+      <!-- Keep theme's 'image' class for layout; add our class to override sizing -->
+      <div class="image r-spotlight__media">
+        {{ with $p.Params.image }}
+          <img src="{{ . | relURL }}" alt="{{ $p.Title }}" loading="lazy">
+        {{ else }}
+          <img src="/uploads/placeholder.png" alt="" loading="lazy">
+        {{ end }}
+      </div>
+    </section>
+  {{ end }}
+{{ end }}

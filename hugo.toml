@@ -1,0 +1,12 @@
+baseURL = "https://weisslabmit.github.io/lab-website/"
+title = "The Weiss Lab @MIT"
+theme = "hugo-story"
+languageCode = "en-us"
+
+relativeURLs = true        # <-- remove the quotes
+
+[outputs]
+section = ["HTML"]
+
+[Params]
+  customCSS = ["css/custom.css"]

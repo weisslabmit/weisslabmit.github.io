@@ -1,0 +1,2246 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+/* Default site typography: HELVETICA everywhere */
+html, body,
+p, li, a, nav, button, input, textarea, select,
+blockquote, figcaption, small, strong, em,
+.section, .inner, .content, .button, .actions, .icons {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+}
+
+
+/* ======================================
+   MIT Custom Styles for Hugo Story
+   File: static/css/custom.css
+====================================== */
+
+/* -------------------------------
+   Font definition (MIT Font)
+--------------------------------*/
+:root {
+  --mit-font-family: "neue-haas-grotesk-display", sans-serif;
+  --mit-font-weight: 700;
+  --mit-font-style: normal;
+}
+
+/* -------------------------------
+   Headings: use MIT font
+--------------------------------*/
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--mit-font-family) !important;
+  font-weight: var(--mit-font-weight) !important;
+  font-style: var(--mit-font-style) !important;
+  letter-spacing: 0.0005em;  /* <-- adds subtle spacing between letters */
+  color: #6c6c6c; 
+}
+
+/* -------------------------------
+   Banner: full-screen hero with title + centered menu
+--------------------------------*/
+#banner {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;              /* full viewport height (mobile safe) */
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;              /* centers the whole content block */
+  justify-content: center;
+  text-align: center;
+  border: none;
+  background: none;                 /* no background by default */
+  overflow: hidden;
+}
+
+/* Centered banner content (title + menu) */
+#banner .content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;          /* vertical centering inside the hero */
+  gap: 0rem;                     /* space between title and menu */
+  padding: 0rem 1.5rem;
+  max-width: 1100px;
+  width: 100%;
+}
+
+/* Banner title */
+#banner .content > h1,
+#banner h1 {
+  font-family: var(--mit-font-family) !important;
+  font-weight: var(--mit-font-weight) !important;
+  font-style: var(--mit-font-style) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  line-height: 1.1;
+  font-size: clamp(3.5rem, calc(2rem + 3vw), 6rem);
+  letter-spacing: 0.0005em;  /* <-- adds subtle spacing between letters */
+  color: #000;                      /* change to #fff if using dark bg */
+  white-space: pre-line !important; /* allows <br> */
+  margin-bottom: 0 !important;
+}
+
+/* Hide other theme-injected banner bits */
+#banner .image,
+#banner .actions,
+#banner p,
+#banner .button,
+#banner .icons,
+#banner .subtitle {
+  display: none !important;
+}
+
+/* -------------------------------
+   Generic body reset
+--------------------------------*/
+body {
+  margin: 0;
+  color: #222;
+  background: #fff;
+}
+/* ==============================
+   HOME MENU iframe — responsive, centered, full-bleed on mobile
+   Replace your existing .embed-frame blocks with this
+============================== */
+
+.embed-frame{
+  /* GWD stage size */
+  --stage-w: 500px;
+  --stage-h: 350px;
+
+  position: relative;
+  z-index: 5;
+
+  width: 100%;
+  max-width: var(--stage-w);
+  margin: 0 auto;
+
+  /* Keep a predictable box that matches the stage aspect */
+  aspect-ratio: 500 / 350;
+
+  overflow: hidden;
+}
+
+.embed-frame iframe{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: var(--stage-w);
+  height: var(--stage-h);
+
+  border: 0;
+  display: block;
+
+  transform-origin: center;
+  /* Fallback scale: based on wrapper width (works everywhere) */
+  transform: translate(-50%, -50%) scale(clamp(0.2, calc(100% / var(--stage-w)), 1));
+}
+
+/* If the browser supports container query units, use them (more precise) */
+@supports (width: 1cqw){
+  .embed-frame{
+    container-type: inline-size;
+  }
+  .embed-frame iframe{
+    transform: translate(-50%, -50%) scale(clamp(0.2, calc(100cqw / var(--stage-w)), 1));
+  }
+}
+
+/* === MOBILE: go truly edge-to-edge, no “boxed” margins, still centered === */
+@media (max-width: 520px){
+  .embed-frame{
+    width: 100vw;
+    max-width: none;
+
+    /* This makes it full-bleed even if the parent section has padding */
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+
+    /* If your GWD animation spills vertically, bump this a bit:
+       e.g. 500/380 or 500/400 */
+    aspect-ratio: 500 / 350;
+  }
+
+  /* Use viewport width for scaling on mobile to avoid any parent constraints */
+  .embed-frame iframe{
+    transform: translate(-50%, -50%) scale(clamp(0.2, calc(100vw / var(--stage-w)), 1));
+  }
+}
+
+/* ======================================
+   Limit global text scaling (balanced)
+====================================== */
+html { font-size: clamp(13px, 0.9vw + 0.45rem, 17px); }
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: clamp(1rem, 0.7vw + 0.7rem, 1.8rem);
+  line-height: 1.35;
+}
+
+p, li, blockquote, .content {
+  font-size: clamp(0.9rem, 0.55vw + 0.5rem, 1.05rem);
+  line-height: 1.55;
+}
+
+/* People fine-tune */
+.people-section h3 { font-size: clamp(1rem, 0.45vw + 0.65rem, 1.4rem); }
+.people-section .role,
+.people-section .bio { font-size: clamp(0.85rem, 0.35vw + 0.45rem, 1rem); }
+
+
+.menu-frame {
+  position: relative;
+}
+
+/* White overlay covers the menu iframe */
+.menu-frame__loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;                 /* <-- white background */
+  z-index: 2;
+  opacity: 1;
+  transition: opacity 0.8s ease;     /* fade smoothly */
+}
+
+/* =========================================================
+   Menu Spinner + Floating Nav + Section Offset
+========================================================= */
+
+.menu-frame__spinner {
+  width: 200px;
+  height: 200px;
+  animation: menuspin 2.4s linear infinite;
+}
+
+@keyframes menuspin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== Floating nav: hidden over banner, fixed after ===== */
+#floating-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: #282828;
+  color: #fff;
+  transform: translateY(-100%); /* hidden by default */
+  opacity: 0;
+  font-family: "Roboto Mono", monospace  !important;
+  pointer-events: none;
+  transition: transform .25s ease, opacity .25s ease;
+}
+#floating-nav.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#floating-nav .floating-nav__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: .6rem 1rem;
+  display: flex;
+  gap: 1.25rem;
+  font-family: "Roboto Mono", monospace  !important;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Baseline link style */
+#floating-nav a {
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: .02em;
+  font-family: "Roboto Mono", monospace !important;
+  opacity: .9;
+  transition: opacity .2s ease, filter .2s ease;
+}
+
+html { scroll-behavior: smooth; }
+
+/* Dim others when one is active (JS toggles .has-active) */
+#floating-nav.has-active a { opacity: .45; }
+
+/* Active link (JS adds .is-active AND inline weight 700!important) */
+#floating-nav a.is-active {
+  font-weight: 700 !important;  /* wins over your global 400!important */
+  opacity: 1 !important;
+  filter: brightness(1.2);
+  text-decoration: none !important;
+}
+
+/* Hover: no underline, slight brighten */
+#floating-nav a:hover { opacity: .95; text-decoration: none; }
+
+
+/* ===== Timeline: center + responsive downscale (no drift) ===== */
+.timeline-frame {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1200px;          /* timeline design width */
+  aspect-ratio: 1200 / 500;   /* auto height from width */
+  margin: 0 auto;             /* center wrapper itself */
+  overflow: hidden;
+  container-type: inline-size; /* enable 100cqw for scaling calc */
+}
+
+.timeline-frame iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1200px;              /* internal stage size from GWD */
+  height: 500px;
+  border: 0;
+  display: block;
+  transform-origin: center;
+  transform: translate(-50%, -50%) scale(clamp(0.2, calc(100cqw / 1200px), 1));
+  will-change: transform;
+}
+
+/* Timeline spinner overlay: hidden by default */
+.timeline-frame__loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  z-index: 3;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .35s ease, visibility .35s ease; /* snappier fade */
+}
+
+/* Plasmid spinner */
+.timeline-frame__spinner {
+  width: 140px;
+  height: 140px;
+  animation: timelinespin 2.4s linear infinite;
+}
+@keyframes timelinespin { to { transform: rotate(360deg); } }
+
+/* When JS adds `.is-loading` on the frame, show the overlay */
+.timeline-frame.is-loading .timeline-frame__loader {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+/* --- Adjust header spacing in timeline & research sections --- */
+#research-timeline header.major,
+#research header.major {
+  margin-top: 1rem;        /* small top margin (tight to section start) */
+  margin-bottom: 1.5rem;     /* more space before the content below */
+  text-align: center;
+}
+
+/* Make their titles visually balanced */
+#research-timeline h2,
+#research header.major h2 {
+  font-size: clamp(1.6rem, 1vw + 1rem, 2.2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;                 /* remove any default heading margins */
+  padding: 0;                /* clean slate */
+  color: #2a2a2a;
+}
+
+.research > .content {
+  max-width: 1600px;   /* was 1200px; try 1600–1800px */
+}
+
+/* ============================
+   PEOPLE — CLEAN BASE
+============================ */
+
+/* Center like the banner and control side padding here only */
+.people-section > .content {
+  max-width: 1400px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 3rem);
+}
+
+/* ============================
+   PEOPLE GRID — FLEX-CENTERED
+============================ */
+.people-section .people-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;   /* centers every row, including the last */
+  align-items: stretch;
+  width: 100%;
+}
+
+/* Space between different role groups */
+.people-section .people-grid + .people-grid {
+  margin-top: 2rem;
+}
+
+/* Optional: first (PI) grid uses a single centered card */
+.people-section .people-grid:first-of-type .person-card {
+  width: 260px;   /* slightly larger PI card; change to 240px for uniform size */
+  max-width: 260px;
+}
+
+/* ============================
+   PERSON CARD (shared styles)
+============================ */
+.person-card {
+  text-align: center;
+  padding: 0;
+  width: 240px;            /* fixed width for consistent wrapping */
+  max-width: 240px;
+}
+
+.person-card .image.avatar {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.person-card .image.avatar img {
+  display: block;
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 9999px;
+}
+@media (min-width: 900px) {
+  .person-card .image.avatar img {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+.person-card h3 {
+  margin: 0.25rem 0 0.25rem;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.person-card .role {
+  font-weight: 600;
+  opacity: 0.85;
+  margin-top: -0.15rem;
+}
+
+.person-card .bio {
+  font-size: 0.9rem;  /* ~14–15px */
+  line-height: 1.45;
+  opacity: 0.9;
+  margin-top: 0.35rem;
+}
+
+/* ============================
+   EMAIL & LINKS
+============================ */
+
+/* Obfuscated email */
+.person-card .person-email,
+.person-profile .person-email {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: "Roboto Mono", monospace;
+  font-size: 0.7rem;   /* smaller, similar to .role */
+  opacity: 0.9;
+}
+
+/* Icon row — icon-only (no pills/borders) */
+.person-card .person-links,
+.person-profile .person-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.person-card .person-links a,
+.person-profile .person-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  min-width: 0;
+  height: auto;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  opacity: 0.95;
+  transition: transform .15s ease, opacity .15s ease;
+}
+
+.person-card .person-links a:hover,
+.person-profile .person-links a:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.person-card .person-links svg,
+.person-profile .person-links svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* ============================
+   PERSON PAGE (details view)
+============================ */
+.person-profile {
+  padding-inline: clamp(1.5rem, 5vw, 4rem);
+}
+
+/* Co-supervised line — subtle, below role */
+.person-card .co-supervised,
+.person-profile .co-supervised {
+  margin-top: 0.1rem;
+  font-size: 0.7rem;
+  opacity: 0.85;
+  font-style: italic;
+}
+
+/* ============================
+   Content Width
+============================ */
+
+section.wrapper {
+  max-width: 1500px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 3rem);
+}
+
+
+
+/* ============================
+   Research Spotlights — center image column vertically
+============================ */
+
+/* Desktop/tablet: make each spotlight row align its two columns vertically */
+@media (min-width: 980px) {
+  #research .spotlights > section,
+  #research .spotlight {
+    display: flex !important;          /* keep Story's two-column row */
+    align-items: center !important;    /* <-- vertically center both columns */
+  }
+
+  /* Ensure both columns participate in vertical centering */
+  #research .spotlights > section .content,
+  #research .spotlights > section .image,
+  #research .spotlight .content,
+  #research .spotlight .image {
+    align-self: center !important;     /* guard against theme overrides */
+  }
+}
+
+/* Keep your image pane styling: white background + inner centering */
+#research .spotlight .image.r-spotlight__media {
+  background-color: #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  height: clamp(180px, 24vw, 300px) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;  
+  padding: 0 !important;        /* ensure no internal padding */
+  margin: 0 !important;         /* remove any default outer margin */
+}
+
+/* Image: contain, no stretch */
+#research .spotlight .image.r-spotlight__media img {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: 98% !important;
+  max-height: 98% !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+@media (min-width: 980px) {
+  #research .spotlight .content,
+  #research .spotlight .image { height: auto !important; }
+}
+
+/* ============================
+   Research Spotlights — MOBILE vertical centering fix
+   (applies when the spotlight stacks)
+============================ */
+@media (max-width: 979px) {
+  /* Make the image pane a proper centering box with a sensible minimum height */
+  #research .spotlight .image.r-spotlight__media {
+    display: flex !important;
+    align-items: center !important;      /* vertical centering */
+    justify-content: center !important;  /* horizontal centering */
+    min-height: 220px;                    /* tweak: 180–280px as you like */
+    height: auto !important;              /* don’t inherit desktop slot height */
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Image should shrink to fit, never stretch; centered inside the box */
+  #research .spotlight .image.r-spotlight__media img {
+    width: auto !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+    margin: 0 auto !important;
+  }
+
+  /* Ensure both stacked columns participate in centering (theme guard) */
+  #research .spotlight .image,
+  #research .spotlight .content {
+    align-self: center !important;
+  }
+}
+
+/* ============================
+   Admin Button on Banner — desktop-only subtle grey pill
+============================ */
+.banner-admin-btn {
+  position: absolute;
+  bottom: 1.2rem;
+  right: 1.2rem;
+  z-index: 50;
+  background: rgba(60, 60, 60, 0.85);   /* subtle grey background */
+  color: #fff;
+  font-family: "Roboto", monospace  !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0.15rem 0.6rem;              /* compact pill shape */
+  border-radius: 9999px;                /* rounded pill corners */
+  letter-spacing: 0.02em;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.banner-admin-btn:hover {
+  opacity: 1;
+  background: rgba(30, 30, 30, 0.95);   /* darker on hover */
+}
+
+.banner-admin-btn:active {
+  transform: translateY(0);
+  opacity: 0.9;
+}
+
+/* Hide on smaller screens (show only on desktop) */
+@media (max-width: 980px) {
+  .banner-admin-btn {
+    display: none !important;
+  }
+}
+
+/* ======================================
+   People group spacing and heading style
+====================================== */
+.people-heading {
+  text-align: center;
+  font-family: var(--mit-font-family);
+  font-weight: var(--mit-font-weight);
+  font-size: clamp(1.4rem, 0.8vw + 1rem, 2rem);
+  color: #2a2a2a;
+  margin-top: 4rem;    /* default top spacing for later groups */
+  margin-bottom: 2rem; /* spacing below heading */
+}
+
+/* Remove top space before the first heading (Ron) */
+.people-heading:first-of-type {
+  margin-top: 0;
+}
+
+.people-grid {
+  margin-bottom: 3rem; /* space after each group */
+}
+
+
+/* Place in static/css/custom.css */
+
+/* Headings rhythm */
+.people-heading {
+  text-align: center;
+  font-family: var(--mit-font-family);
+  font-weight: var(--mit-font-weight);
+  font-size: clamp(1.4rem, 0.8vw + 1rem, 2rem);
+  color: #2a2a2a;
+  margin: 0 0 2rem 0;
+}
+.people-heading + .pi-card { margin-bottom: 3rem; }
+.people-heading + .people-grid { margin-bottom: 3rem; }
+
+/* ======================================
+   PI card: photo left, info right (outside grid)
+   - larger photo & name
+   - vertically centered alignment
+====================================== */
+
+.pi-card {
+  display: flex;
+  align-items: center;           /* ✅ centers photo with info column */
+  justify-content: flex-start;
+  gap: 2.5rem;
+  text-align: left;
+  width: 100%;
+  max-width: 1000px;
+  margin-inline: auto;
+  margin-bottom: 3.5rem;
+  padding: 0 1rem;
+}
+
+/* Left column (photo) */
+.pi-card .image.avatar {
+  flex: 0 0 280px;              /* ✅ slightly bigger photo */
+  margin: 0;
+  display: flex;
+  align-items: center;          /* ensures perfect vertical centering */
+  justify-content: center;
+}
+
+.pi-card .image.avatar img {
+  width: 100%;
+  height: auto;
+  max-width: 280px;             /* ✅ larger photo size */
+  border-radius: 9999px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Right column (name, role, links, bio) */
+.pi-card .person-info {
+  flex: 1;
+  min-width: 280px;
+  padding-left: 2rem;
+}
+
+.pi-card h3,
+.pi-card .role,
+.pi-card .bio,
+.pi-card .person-links {
+  text-align: left;
+}
+
+.pi-card h3 {
+  font-size: clamp(1.2rem, 0.4vw + 0.8rem, 1.8rem);
+  margin: 0 0 .4rem 0;
+  line-height: 1.15;
+}
+
+.pi-card .role {
+  font-weight: 600;
+  opacity: .9;
+  margin-bottom: .75rem;
+  font-size: 0.85rem;
+}
+
+.pi-card .bio {
+  margin-top: 1rem;
+  line-height: 1.55;
+  opacity: .9;
+  font-size: clamp(0.9rem, 0.4vw + 0.8rem, 0.9rem);
+  max-width: 640px;
+}
+
+.pi-card .person-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem .9rem;
+  margin-top: .75rem;
+  justify-content: flex-start;   /* ✅ icons align left */
+  align-items: center;
+}
+/* Responsive stacking for mobile */
+@media (max-width: 700px) {
+  .pi-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .pi-card .image.avatar {
+    flex: none;
+    margin-bottom: 0.5rem;
+  }
+
+  .pi-card .person-info {
+    padding-left: 0;
+    text-align: center;
+  }
+
+  .pi-card h3,
+  .pi-card .role,
+  .pi-card .bio {
+    text-align: center;
+  }
+
+  /* ✅ Fix: center icons when stacked */
+  .pi-card .person-links {
+    justify-content: center !important;
+    text-align: center;
+  }
+}
+
+
+/* static/css/custom.css (append this) */
+
+/* ====== Alumni CTA button under People ====== */
+.people-alumni-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+  margin-bottom: 5rem;
+}
+.alumni-btn {
+  display: inline-block;
+  padding: .55rem 1.1rem;
+  border-radius: 9999px;
+  background: #2a2a2a;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: transform .15s ease, opacity .15s ease, background .2s ease;
+}
+.alumni-btn:hover { background: #111; transform: translateY(-1px); }
+.alumni-btn:active { transform: translateY(0); }
+
+/* ====== Alumni page ====== */
+.alumni-section .inner {
+  padding-inline: clamp(1rem, 4vw, 3rem);
+}
+
+.alumni-heading {
+  text-align: center;
+  font-family: var(--mit-font-family);
+  font-weight: var(--mit-font-weight);
+  font-size: clamp(1.1rem, 0.6vw + 0.9rem, 1.5rem);
+  color: #2a2a2a;
+  margin: 1rem 0 1rem;
+}
+
+/* Grid: auto-fit with min 2 cols, up to ~7 cols depending on width */
+.alumni-grid {
+  --card-min: 110px;         /* minimum card width */
+  --gap: 14px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat(auto-fit, minmax(var(--card-min), 1fr));
+  max-width: calc(7 * (var(--card-min) + var(--gap))); /* soft cap ~7 columns */
+  margin: 0 auto 2.5rem;
+}
+
+.alumni-card {
+  text-align: center;
+}
+
+.alumni-card .image.avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 0 auto .4rem;
+}
+@media (min-width: 900px) {
+  .alumni-card .image.avatar { width: 110px; height: 110px; }
+}
+.alumni-card .image.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.alumni-name {
+  font-size: .9rem;
+  line-height: 1.2;
+  margin: 0;
+  color: #2a2a2a;
+}
+
+/* ===========================
+   Alumni tweaks (still Roboto Mono)
+=========================== */
+
+/* Big main title */
+.alumni-section header.major h2 {
+  font-weight: 700 !important;
+  letter-spacing: -0.015em;
+  font-size: clamp(2.4rem, 2vw + 1rem, 3.6rem);
+  color: #111;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Category headings */
+.alumni-section h3.alumni-heading {
+  font-weight: 700 !important;
+  font-size: clamp(1.3rem, 0.9vw + 1rem, 2rem);
+  color: #222;
+  text-align: center;
+  margin: 2.5rem 0 1.25rem;
+}
+
+/* Alumni names (keep mono, just tighten spacing + size) */
+.alumni-section h4.alumni-name {
+  font-weight: 400 !important;
+  font-size: 0.8rem;
+  letter-spacing: -0.01em;
+  color: #2a2a2a;
+  margin: 0;
+}
+
+
+/* Add a bit more breathing room between title and grids */
+.alumni-section .content > header.major {
+  margin-bottom: 1.75rem !important;
+}
+
+
+/* Alumni grid sizing */
+.alumni-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  max-width: 1000px;
+  margin: 0 auto 3rem;
+}
+.alumni-card { text-align: center; }
+.alumni-card .image.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 0 auto 0.5rem;
+}
+.alumni-card .image.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Floating "Back to People" button */
+.back-to-people-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1200;
+  display: inline-block;
+  padding: 0.55rem 1rem;
+  border-radius: 9999px;
+  background: #2a2a2a;
+  color: #fff !important;
+  text-decoration: none;
+  font-family: "Roboto Mono", monospace  !important;
+  font-weight: 600;
+  letter-spacing: .02em;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+  transition: transform .15s ease, opacity .15s ease, background .2s ease;
+}
+.back-to-people-btn:hover {
+  background: #000;
+  transform: translateY(-1px);
+}
+.back-to-people-btn:active {
+  transform: translateY(0);
+}
+@media (max-width: 420px) {
+  .back-to-people-btn {
+    top: 10px;
+    right: 10px;
+    padding: .45rem .75rem;
+    font-size: .9rem;
+  }
+}
+
+
+/* === Make person-subtitle visually identical to the old "role" === */
+
+/* The clamp size you used for role/bio in People lists */
+.people-section .role,
+.people-section .person-subtitle {
+  font-size: clamp(0.85rem, 0.35vw + 0.45rem, 1rem);
+}
+
+/* Card subtitle = old .role on cards */
+.person-card .role,
+.person-card .person-subtitle {
+  font-weight: 600;
+  opacity: 0.85;
+  margin-top: -0.15rem;
+  line-height: 1.25;
+}
+
+/* PI layout subtitle = old .role on PI card */
+.pi-card .role,
+.pi-card .person-subtitle {
+  font-weight: 600;
+  opacity: 0.9;
+  margin-bottom: .75rem;
+  font-size: 0.85rem;
+}
+
+/* Single person page subtitle = match old role styling there too */
+.person-profile .role,
+.person-profile .person-subtitle {
+  font-weight: 600;
+  opacity: 0.85;
+  line-height: 1.25;
+  /* keep size consistent with your page scale; tweak only if needed */
+  font-size: 1rem;
+}
+
+
+/* ========= Person profile (single) ========= */
+
+.profile-wrap {
+  --card-w: 320px;
+  --gap: clamp(1.25rem, 2.4vw, 2rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gap);
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-inline: clamp(1rem, 4vw, 3rem);
+}
+
+/* Two columns on desktop */
+@media (min-width: 980px) {
+  .profile-wrap {
+    grid-template-columns: var(--card-w) minmax(0, 1fr);
+  }
+}
+
+/* Left card */
+.profile-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.06);
+  padding: 1.25rem 1.25rem 1rem;
+  text-align: center;
+  border: 1px solid rgba(0,0,0,.06);
+}
+
+@media (min-width: 980px) {
+  .profile-card { position: sticky; top: 1.25rem; }
+}
+
+.profile-photo {
+  display: grid;
+  place-items: center;
+  margin-bottom: 0.9rem;
+}
+.profile-photo img {
+  width: 180px;
+  height: 180px;
+  border-radius: 9999px;
+  object-fit: cover;
+  display: block;
+}
+@media (min-width: 1200px) {
+  .profile-photo img { width: 200px; height: 200px; }
+}
+
+.profile-name {
+  margin: 0.25rem 0 0.2rem;
+  line-height: 1.15;
+  word-break: break-word;
+  font-size: clamp(1.2rem, 0.8vw + 1rem, 2rem);
+}
+
+/* Make subtitle match the list cards look */
+.profile-card .person-subtitle {
+  font-weight: 600;
+  opacity: 0.9;
+  line-height: 1.25;
+  font-size: 1rem;
+  margin: 0.15rem 0 0.35rem;
+}
+
+/* Co-supervision line under subtitle */
+.profile-card .co-supervised {
+  margin-top: .1rem;
+  font-size: .8rem;
+  opacity: .8;
+  font-style: italic;
+}
+
+/* Icon row */
+.profile-card .person-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .55rem .75rem;
+  margin-top: .55rem;
+}
+.profile-card .person-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  opacity: .95;
+  transition: transform .15s ease, opacity .15s ease;
+}
+.profile-card .person-links a:hover { opacity: 1; transform: translateY(-1px); }
+.profile-card .person-links svg { width: 20px; height: 20px; display: block; }
+
+/* Meta list (degrees etc.) */
+.profile-meta {
+  list-style: none;
+  margin: .9rem 0 0;
+  padding: 0;
+  text-align: left;
+  border-top: 1px solid rgba(0,0,0,.08);
+  padding-top: .85rem;
+}
+.profile-meta li {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: .5rem;
+  align-items: baseline;
+  margin: .35rem 0;
+  font-size: .95rem;
+}
+.profile-meta .k { font-weight: 600; opacity: .9; }
+.profile-meta .v { opacity: .9; }
+
+/* Right content column */
+.profile-content {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,.06);
+  box-shadow: 0 10px 30px rgba(0,0,0,.04);
+  padding: clamp(1rem, 2.5vw, 2rem);
+}
+.profile-content h2 {
+  margin: 0 0 .6rem 0;
+ font-size: clamp(0.95rem, 0.7vw + 0.6rem, 1.25rem); /* was ~1.6rem max */
+}
+.profile-content .pp-intro p { font-size: 1.05rem; line-height: 1.6; }
+.profile-content .pp-experience,
+.profile-content .pp-bio,
+.profile-content .pp-content {
+  margin-top: 1.25rem;
+}
+.profile-content p, 
+.profile-content li { line-height: 1.6; }
+
+/* Mobile spacing */
+@media (max-width: 979px) {
+  .profile-card { margin-top: .5rem; }
+  .profile-content { margin-bottom: .5rem; }
+}
+
+/* Optional: print-friendly */
+@media print {
+  .profile-wrap { display: block; }
+  .profile-card, .profile-content { box-shadow: none; border: 0; padding: 0; }
+  .profile-photo img { width: 120px; height: 120px; }
+}
+
+
+/* === RESOURCES (Story-style) FINAL ===
+   - large uniform icons
+   - aligned titles/descriptions
+   - subtle grid separators
+======================================= */
+
+.resources-grid {
+  --min: 260px;
+  --res-line: rgba(0, 0, 0, 0.08);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min), 1fr));
+  gap: 1px;
+  background: var(--res-line);
+  border: 1px solid var(--res-line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.resource-card {
+  background: #fff;
+  padding: 1.6rem 1.25rem 1.45rem;
+  display: grid;
+  grid-template-rows: auto auto 1fr;  /* icon, text block, filler */
+  justify-items: center;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+.resource-card:hover {
+  background: #f8f8f8;
+}
+.resource-card:active {
+  transform: translateY(1px);
+}
+
+/* --- FIXED ICON AREA --- */
+.rc-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 140px;                    /* fixed vertical space for alignment */
+  margin-bottom: 0.9rem;
+}
+.rc-media img {
+  max-width: 110px;
+  max-height: 110px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.18s ease;
+}
+.resource-card:hover .rc-media img {
+  transform: scale(1.05);
+}
+
+/* --- TITLES --- */
+.rc-title {
+  font-family: var(--mit-font-family);
+  font-weight: 700;
+  font-size: clamp(0.95rem, 0.45vw + 0.75rem, 1.1rem);
+  line-height: 1.22;
+  margin: 0 0 0.4rem 0;
+}
+
+/* --- DESCRIPTIONS --- */
+.rc-desc {
+  font-size: clamp(0.83rem, 0.35vw + 0.55rem, 0.9rem);
+  line-height: 1.55;
+  opacity: 0.9;
+  max-width: 62ch;
+  margin: 0;
+  display: block;
+}
+
+/* --- MOBILE --- */
+@media (max-width: 520px) {
+  .resources-grid {
+    --min: 200px;
+  }
+  .resource-card {
+    padding: 1.3rem 1rem 1.1rem;
+  }
+  .rc-media {
+    height: 110px;                  /* proportionally smaller fixed space */
+  }
+  .rc-media img {
+    max-width: 90px;
+    max-height: 90px;
+  }
+}
+
+/* === Resources subtext spacing & typography tweak === */
+.resources-section .section-desc {
+  margin-top: 2rem;                /* more space above grid */
+  margin-bottom: 2rem;               /* keep consistent with below */
+  font-size: clamp(1rem, 0.45vw + 0.8rem, 1.15rem); /* a bit larger */
+  line-height: 1.55;
+  color: #333;                       /* slightly darker gray for legibility */
+  opacity: 0.9;                      /* keep it subtle but readable */
+}
+
+
+/* Publications block structure */
+.pubs-section .pubs-year,
+.pubs-page .pubs-year {
+  margin: 0.25rem 0 0.75rem;
+  font-weight: 800;
+}
+
+.pubs-section .pubs-list,
+.pubs-page .pubs-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.pubs-section .pub,
+.pubs-page .pub {
+  margin: 1rem 0 1.1rem;
+  line-height: 1.6;
+}
+
+.pubs-section .pub-title strong a,
+.pubs-page .pub-title strong a {
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,0,0,.12);
+}
+
+.pubs-section .pub-title strong a:hover,
+.pubs-page .pub-title strong a:hover {
+  border-bottom-color: rgba(0,0,0,.35);
+}
+
+/* Tabs and footer rows use your theme's .actions + .button already */
+.pubs-tabs { justify-content: center; }
+.pubs-footer { justify-content: center; }
+
+/* Hide helpers */
+.hidden { display: none; }
+
+/* Floating back button on the publications page */
+.float-back {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1000;
+}
+
+/* ==== Publications page layout spacing ==== */
+.pubs-page .inner {
+  max-width: 1100px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 3rem);
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+/* ==== Floating "Back" buttons (People + Home share styling) ==== */
+/* Replace your existing ".back-to-people-btn { ... }" with this combined block */
+.back-to-people-btn,
+.back-to-home-btn {
+  position: fixed;                  /* specific positions set per-button below */
+  z-index: 1200;
+  display: inline-block;
+  padding: 0.55rem 1rem;
+  border-radius: 9999px;
+  background: #2a2a2a;
+  color: #fff !important;
+  text-decoration: none;
+  font-family: "Roboto Mono", monospace  !important;
+  font-weight: 600;
+  letter-spacing: .02em;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+  transition: transform .15s ease, opacity .15s ease, background .2s ease;
+}
+.back-to-people-btn:hover,
+.back-to-home-btn:hover {
+  background: #000;
+  transform: translateY(-1px);
+}
+.back-to-people-btn:active,
+.back-to-home-btn:active {
+  transform: translateY(0);
+}
+
+/* Alumni "Back to People" keeps its original position if you have one elsewhere.
+   For Publications "Back to Home", pin it top-right: */
+.back-to-home-btn {
+  top: 16px;
+  right: 16px;
+}
+
+@media (max-width: 420px) {
+  .back-to-home-btn {
+    top: 10px;
+    right: 10px;
+    padding: .45rem .75rem;
+    font-size: .9rem;
+  }
+}
+
+
+/* === CONTACT SECTION FINAL POLISHED === */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(2rem, 4vw, 3rem);
+  align-items: start;
+  border-top: 1px solid rgba(0,0,0,.1);
+  border-bottom: 1px solid rgba(0,0,0,.1);
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.contact-left {
+  padding-right: 2rem;
+  border-right: 1px solid rgba(0,0,0,.1);
+}
+
+.contact-right {
+  padding-left: 2rem;
+}
+
+/* Address blocks stacked cleanly */
+.addr-block {
+  margin-bottom: 1.6rem;
+}
+.addr-k {
+  font-weight: 700;
+  font-family: var(--mit-font-family);
+  color: #2a2a2a;
+  margin-bottom: 0.35rem;
+}
+.addr-v {
+  line-height: 1.55;
+  opacity: 0.9;
+}
+
+/* === Larger, centered logos === */
+.logos-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(2.5rem, 5vw, 4rem);
+  margin-top: 3.5rem;
+}
+.logos-row .logo {
+  height: 120px;     /* larger size */
+  width: auto;
+  opacity: 0.95;
+  transition: transform .15s ease, opacity .15s ease;
+}
+.logos-row .logo:hover {
+  transform: translateY(-3px);
+  opacity: 1;
+}
+
+/* === Map full width and taller === */
+.contact-map iframe {
+  width: 100%;
+  height: 440px;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 10px;
+  margin-top: 1rem;
+}
+
+/* === Responsive === */
+@media (max-width: 900px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    border: none;
+  }
+  .contact-left {
+    border-right: none;
+    padding-right: 0;
+    border-bottom: 1px solid rgba(0,0,0,.1);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+  .contact-right {
+    padding-left: 0;
+  }
+  .logos-row {
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+  .logos-row .logo {
+    height: 100px;
+  }
+  .contact-map iframe {
+    height: 320px;
+  }
+}
+
+/* ==== Opportunities page layout (match Publications/Alumni rhythm) ==== */
+.opps-page .inner {
+  max-width: 1100px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 3rem);
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+.opps-page header.major {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.opps-page header.major h1 {
+  font-size: clamp(1.8rem, 1.2vw + 1rem, 2.4rem);
+  font-weight: 700;
+  margin: 0 0 .4rem 0;
+}
+.opps-page header.major p {
+  opacity: .9;
+}
+
+/* Cards */
+.opps-list {
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 1.6rem);
+}
+.opportunity-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.04);
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+}
+.opp-title {
+  margin: 0 0 .5rem 0;
+  font-family: var(--mit-font-family);
+  font-weight: var(--mit-font-weight);
+  font-size: clamp(1.1rem, .7vw + .9rem, 1.5rem);
+  color: #2a2a2a;
+}
+.opp-body p { margin: 0 0 .8rem 0; line-height: 1.6; }
+.opp-actions { margin-top: .6rem; }
+.opp-link {
+  display: inline-block;
+}
+
+/* Floating purple "Now recruiting!" button */
+.recruiting-fab {
+  position: fixed;
+  left: 16px;
+  bottom: 18px;
+  z-index: 1400;
+  display: inline-block;
+  padding: .6rem 1rem;
+  border-radius: 9999px;
+  background: #6b46c1;           /* purple */
+  color: #fff !important;
+  font-family: "Roboto Mono", monospace  !important;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: .02em;
+  box-shadow: 0 10px 24px rgba(107, 70, 193, .35);
+  transition: transform .15s ease, opacity .15s ease, box-shadow .2s ease;
+}
+.recruiting-fab:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(107, 70, 193, .45);
+}
+.recruiting-fab:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+  .recruiting-fab {
+    left: 10px;
+    bottom: 12px;
+    padding: .5rem .8rem;
+    font-size: .95rem;
+  }
+}
+
+/* --- Gentle pulse animation for recruiting button --- */
+@keyframes fabPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.recruiting-fab {
+  animation: fabPulse 5s ease-in-out infinite;
+}
+
+.recruiting-fab:hover {
+  transform: scale(1.08); /* adds a tiny bump beyond the pulse */
+  box-shadow: 0 14px 30px rgba(107, 70, 193, .45);
+}
+
+/* === Footer centered layout === */
+footer {
+  display: flex;
+  justify-content: center;   /* centers horizontally */
+  align-items: center;       /* centers vertically */
+  text-align: center;
+  min-height: 80px;          /* adjust based on your design */
+  padding: 1.5rem 1rem;
+}
+
+
+/* === Purple Opportunities button (non-animated) === */
+.contact-opp-button {
+  text-align: center;
+  margin: 1.8rem 0 2.5rem 0;
+}
+
+.purple-button {
+  display: inline-block;
+  padding: 0.7rem 1.4rem;
+  border-radius: 9999px;
+  background: #6b46c1;
+  color: #fff !important;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  box-shadow: 0 6px 20px rgba(107, 70, 193, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.purple-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(107, 70, 193, 0.45);
+}
+
+.purple-button:active {
+  transform: translateY(0);
+}
+
+/* === Make bold text stand out in Contact section === */
+.contact-left strong {
+  font-weight: 700 !important;
+  color: #2a2a2a;
+}
+
+
+/* Hidden by default */
+.recruiting-fab {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease;
+}
+
+/* Visible only when JS adds .is-active */
+.recruiting-fab.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* === Fix global weight override just where we need it === */
+
+/* Make strong actually bold on the site (safe override) */
+strong, b { font-weight: 700 !important; }
+
+/* Publications: titles always bold (linked or not) */
+.pubs-page .pub-title strong,
+.pubs-page .pub-title a {
+  font-weight: 700 !important;
+  color: #000;
+  text-decoration: none;
+}
+
+/* === Ensure ALL publication titles (home + page) are bold === */
+
+/* Both the homepage section (.pubs-section) and the main page (.pubs-page) */
+.pubs-section .pub-title,
+.pubs-page .pub-title {
+  font-weight: 700 !important;
+  color: #000;
+}
+
+/* If the title is a link, make it look clean and strong */
+.pubs-section .pub-title a,
+.pubs-page .pub-title a {
+  font-weight: 700 !important;
+  color: #000;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  transition: border-color 0.2s ease;
+}
+
+.pubs-section .pub-title a:hover,
+.pubs-page .pub-title a:hover {
+  border-bottom-color: rgba(0,0,0,0.35);
+}
+
+/* Contact: ensure bold headings inside the left column still pop */
+.contact-left strong { font-weight: 700 !important; color: #2a2a2a; }
+
+/* Logos: keep exactly one definition; choose your final size */
+.logos-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(2.5rem, 5vw, 4rem);
+  margin-top: 3.5rem;
+}
+.logos-row .logo { height: 120px; width: auto; }
+
+
+/* ===== Opportunities: kill any card UI and keep only separators ===== */
+.opps-list,
+.opportunity-row {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* If any previous styles used .opportunity-card, neutralize them too */
+.opportunity-card {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  border: 0 !important;
+  padding: 0 !important; /* we'll control rhythm below */
+}
+
+/* Our clean, lined list */
+.opps-list {
+  border-top: 1px solid rgba(0,0,0,.12) !important;
+  border-bottom: 1px solid rgba(0,0,0,.12) !important;
+}
+
+.opportunity-row {
+  padding: clamp(1rem, 2.5vw, 1.25rem) 0 !important;
+  border-bottom: 1px solid rgba(0,0,0,.08) !important;
+}
+.opportunity-row:last-child { border-bottom: none !important; }
+
+/* Title + body rhythm (kept minimal) */
+.opp-title {
+  margin: 0 0 .45rem 0 !important;
+  font-family: var(--mit-font-family);
+  font-weight: var(--mit-font-weight);
+  font-size: clamp(1.05rem, .7vw + .9rem, 1.35rem);
+  color: #2a2a2a;
+}
+.opp-body p { margin: 0 0 .75rem 0; line-height: 1.6; }
+.opp-actions { margin-top: .4rem; }
+
+/* Smaller, subtler subtitle under "Opportunities" */
+.opps-page .opps-subtitle {
+  margin-top: 0.35rem;
+  font-size: 0.85rem;      /* smaller size */
+  line-height: 1.4;
+  color: #555;
+  opacity: 0.85;
+  font-weight: 400;
+}
+
+/* Compact, centered bottom note */
+.opps-note {
+  margin-top: 1.8rem;
+  text-align: center;
+  font-size: 0.85rem;         /* same base as body text */
+  line-height: 1.45;
+  color: #444;
+  background: #f9f9f9;
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 6px;
+  padding: 0.8rem 1rem;
+  max-width: 700px;
+  margin-inline: auto;        /* centers horizontally */
+}
+
+.opps-note strong {
+  color: #222;
+}
+
+.opps-note a {
+  font-weight: 700;
+  color: #6b46c1;             /* purple accent to match buttons */
+  text-decoration: none;
+}
+.opps-note a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================
+   Publications Buttons — final balanced version
+   - Unselected: very faint (light gray text)
+   - Active: dark
+   - Footer: medium dark
+   - No font override
+========================================= */
+
+:root {
+  --btn-dark: #1a1a1a;  /* active tab */
+  --btn-mid:  #3b3b3b;  /* footer buttons */
+  --btn-faint: #aaa;    /* much lighter inactive tab text */
+  --btn-border: rgba(0,0,0,.1);
+  --btn-hover: #000;
+}
+
+/* Containers */
+.pubs-section .pubs-tabs,
+.pubs-section .actions,
+.pubs-page   .pubs-tabs,
+.pubs-page   .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* === TOP TAB BUTTONS === */
+.pubs-section .pubs-tabs .button,
+.pubs-page   .pubs-tabs .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+
+  min-height: 26px !important;     /* was ~32px */
+  padding: 0.25rem 0.9rem !important;  /* tighter vertical space */
+  font-size: 0.88rem !important;       /* keeps proportions right */
+  border-radius: 9999px !important;    /* still rounded */
+  line-height: 1.1 !important;
+}
+/* lighter gray for inactive state */
+  background: #eaeaea; 
+  color: #333;
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: none;
+  text-decoration: none;
+  transition: background .18s ease, color .18s ease, border-color .18s ease, transform .12s ease;
+}
+
+/* Hover = subtle darkening */
+.pubs-section .pubs-tabs .button:hover,
+.pubs-page   .pubs-tabs .button:hover {
+  background: #dedede;
+  color: #000;
+}
+
+/* Active = solid dark pill */
+.pubs-section .pubs-tabs .button.active,
+.pubs-page   .pubs-tabs .button.active {
+  background: #1a1a1a !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+.pubs-section .pubs-tabs .button.active:hover,
+.pubs-page   .pubs-tabs .button.active:hover {
+  background: #000 !important;
+}
+
+
+/* === FOOTER BUTTONS === */
+.pubs-page   .actions li > a.button,
+.pubs-section .actions li > a.button {
+  background: #3b3b3b !important;   /* was #1a1a1a → lighter neutral gray */
+  color: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  transition: background .18s ease, transform .12s ease;
+}
+
+/* Hover = subtle darkening */
+.pubs-page   .actions li > a.button:hover,
+.pubs-section .actions li > a.button:hover {
+  background: #1f1f1f !important;
+  transform: translateY(-1px);
+}
+
+/* Active (on click) */
+.pubs-page   .actions li > a.button:active,
+.pubs-section .actions li > a.button:active {
+  transform: translateY(0);
+}
+
+/* === Publications top tabs — force styles with higher specificity === */
+/* Inactive tabs (lighter) */
+.pubs-page   .actions.pubs-tabs li > a.button:not(.active),
+.pubs-section .actions.pubs-tabs li > a.button:not(.active) {
+  background: #eaeaea !important;      /* lighter gray */
+  color: #333 !important;
+  border: 1px solid rgba(0,0,0,.08) !important;
+  box-shadow: none !important;
+}
+
+/* Hover on inactive */
+.pubs-page   .actions.pubs-tabs li > a.button:not(.active):hover,
+.pubs-section .actions.pubs-tabs li > a.button:not(.active):hover {
+  background: #dedede !important;
+  color: #000 !important;
+}
+
+/* Active tab (dark) */
+.pubs-page   .actions.pubs-tabs li > a.button.active,
+.pubs-section .actions.pubs-tabs li > a.button.active {
+  background: #1a1a1a !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+/* Hover on active */
+.pubs-page   .actions.pubs-tabs li > a.button.active:hover,
+.pubs-section .actions.pubs-tabs li > a.button.active:hover {
+  background: #000 !important;
+}
+/* ============================================
+   RESEARCH — balanced spacing: wider gap + more vertical rhythm
+   (final tuned layout)
+============================================ */
+
+:root{
+  /* Column balance + spacing variables */
+  --rs-split-img: clamp(30%, 35vw, 42%);        /* image column width */
+  --rs-gap:       clamp(2rem, 3vw, 3.5rem);     /* horizontal gap between columns */
+  --rs-section-space: clamp(3.5rem, 6vw, 6rem); /* vertical space between sections */
+}
+
+/* Apply clean margin rhythm between spotlight rows */
+#research .spotlights > section,
+#research .spotlight{
+  margin-bottom: var(--rs-section-space);
+  border: none !important;
+}
+
+/* Medium & large screens: two-column layout with wider gap */
+@media (min-width: 980px){
+  #research .spotlights > section,
+  #research .spotlight{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between;
+    gap: var(--rs-gap) !important;
+  }
+
+  #research .spotlight .image.r-spotlight__media{
+    flex: 0 1 var(--rs-split-img) !important;
+    height: var(--rs-desktop-h) !important;
+    max-height: 70vh !important;
+    margin: 0 !important;
+  }
+
+  #research .spotlight .content{
+    flex: 1 1 calc(100% - var(--rs-split-img)) !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+/* Mobile / small screens: stacked layout, keep good breathing room */
+@media (max-width: 979px){
+  #research .spotlights > section,
+  #research .spotlight{
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.75rem;
+    margin-bottom: var(--rs-section-space);
+  }
+
+  #research .spotlight .image.r-spotlight__media{
+    width: 100%;
+    height: var(--rs-mobile-h) !important;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Image styling */
+#research .spotlight .image.r-spotlight__media img{
+  display: block !important;
+  width: auto !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+/* =====================================================
+   Subtle section dividers between main homepage blocks
+   (except above Research — keep banner seamless)
+===================================================== */
+
+/* Base divider line */
+section[id]:not(#banner):not(:last-of-type) {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);   /* thin neutral gray line */
+  margin-top: 0;                               /* no double spacing */
+}
+
+/* Add some breathing room so the divider has space to read */
+section[id]:not(#banner) {
+  padding-top: clamp(3rem, 5vw, 4.5rem);
+  padding-bottom: clamp(3rem, 5vw, 4.5rem);
+}
+
+/* Make sure the banner and first section join perfectly */
+#banner + section {
+  border-top: none !important;
+  margin-top: 0 !important;
+}
+
+/* Optional: make the divider even subtler */
+@media (prefers-color-scheme: light) {
+  section[id]:not(#banner):not(:last-of-type) {
+    border-top-color: rgba(0, 0, 0, 0.06);
+  }
+}
+
+/* =========================================================
+   PHONE: remove side gutters + full-bleed menu (no side space)
+   Put at END of custom.css
+========================================================= */
+@media (max-width: 600px) {
+
+  /* 1) Kill theme gutters that create the “box” */
+  #banner,
+  #banner > .inner,
+  #banner .content,
+  #banner section,
+  #banner .wrapper {
+    max-width: none !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Some Story layouts apply padding on .wrapper/.inner globally;
+     ensure banner specifically has zero side padding */
+  #banner { margin-left: 0 !important; margin-right: 0 !important; }
+
+  /* 2) Full-bleed embed wrapper: edge-to-edge viewport */
+  .embed-frame{
+    --stage-w: 500px;   /* GWD stage width */
+    --stage-h: 350px;   /* GWD stage height (adjust if needed) */
+
+    --menu-scale: min(1, calc(100vw / var(--stage-w)));
+
+    width: 100vw !important;
+    max-width: none !important;
+
+    /* Break out of centered containers */
+    position: relative !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+
+    /* No side margins at all */
+    margin: 0 !important;
+
+    /* Match height to scaled content to prevent clipping */
+    height: calc(var(--stage-h) * var(--menu-scale)) !important;
+
+    overflow: visible !important;
+  }
+
+  /* 3) Iframe: top-centered, scaled from viewport */
+  .embed-frame iframe{
+    position: absolute !important;
+    top: 0 !important;
+    left: 50% !important;
+
+    width: var(--stage-w) !important;
+    height: var(--stage-h) !important;
+
+    border: 0 !important;
+    display: block !important;
+
+    transform-origin: top center !important;
+    transform: translateX(-50%) scale(var(--menu-scale)) !important;
+  }
+}
+
+
+
+/* =========================================================
+   FINAL: Anchor offset for floating nav (dynamic height via JS)
+   - Keeps 2-line nav on phones
+   - Prevents covered content
+   - Does NOT change layout spacing between sections
+   - SPECIAL: #research-top lands tighter (no extra gap)
+========================================================= */
+
+:root{
+  --menu-height: 56px;         /* fallback; JS overwrites */
+  --floating-nav-h: 56px;      /* fallback; JS overwrites */
+  --anchor-gap: 12px;          /* default breathing room below the bar */
+}
+
+/* Browser-native anchor offset (works for hash changes + scrollIntoView) */
+html{
+  scroll-padding-top: calc(var(--menu-height) + var(--anchor-gap));
+}
+
+/* Anchor shim: offset scroll target WITHOUT adding visible layout space */
+section[id]:not(#banner)::before{
+  content: "";
+  display: block;
+  height: calc(var(--menu-height) + var(--anchor-gap));
+  margin-top: calc(-1 * (var(--menu-height) + var(--anchor-gap)));
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Keep your normal section spacing */
+section[id]:not(#banner){
+  position: relative;
+  padding-top: 0.75rem;
+}
+
+/* Theme guards */
+section[id]:not(#banner) > *:first-child { margin-top: 0 !important; }
+section[id]:not(#banner) .inner { padding-top: 0 !important; margin-top: 0 !important; }
+
+/* -----------------------------------------
+   SPECIAL CASE: Research should land tighter
+----------------------------------------- */
+#research-top{
+  --anchor-gap: 0px;
+}
+
+/* PHONE: keep 2-line floating nav (wrap) */
+@media (max-width: 520px){
+  #floating-nav .floating-nav__inner{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: .3rem;
+  }
+
+  #floating-nav a{
+    flex: 0 1 auto;
+    white-space: nowrap;
+    padding: 0 .5rem;
+  }
+}
+
+/* ===========================
+   Lab Photos carousel — full-bleed + slower
+=========================== */
+
+.lab-carousel{
+  position: relative;
+  overflow: hidden;
+
+  /* full-bleed (uses whole viewport width even inside centered containers) */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+
+  border-radius: 10px; /* slightly sharper than 14px */
+}
+
+.lab-carousel__track{
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  width: max-content;
+
+  /* slower */
+  animation: labMarquee 85s linear infinite;
+
+  will-change: transform;
+}
+
+.lab-carousel__item{
+  display: block;
+  flex: 0 0 auto;
+
+  /* keep height consistent; width follows from aspect ratio */
+  height: clamp(140px, 22vw, 220px);
+ 
+
+  overflow: hidden;
+  border-radius: 10px; /* sharper corners */
+  background: #f3f3f3;
+}
+
+.lab-carousel__item img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Pause on hover (desktop) */
+.lab-carousel:hover .lab-carousel__track{
+  animation-play-state: paused;
+}
+
+/* same keyframes logic (needs duplicated items in HTML) */
+@keyframes labMarquee{
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .lab-carousel__track{ animation: none; }
+}
+
+
+/* =========================================================
+   LAB PHOTOS PAGE (/lab-photos/)
+   - Grid shows SMALL thumbnails with FULL image (no crop)
+   - Lightbox image never exceeds site width
+========================================================= */
+
+/* Grid: smaller thumbs */
+.lab-grid{
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* smaller */
+  margin-top: 1.25rem;
+}
+
+/* Thumb container */
+.lab-thumb{
+  border: 0;
+  padding: 0;
+  background: #f3f3f3;        /* shows behind letterboxing */
+  border-radius: 10px;         /* sharper corners */
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Thumbnail image: show FULL image, not cropped */
+.lab-thumb img{
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3;         /* keeps tiles uniform */
+  object-fit: contain;         /* <-- key: no crop, full image */
+  object-position: center;
+  background: #f3f3f3;
+  display: block;
+}
+
+/* Lightbox overlay */
+.lab-lightbox{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1.25rem;
+}
+.lab-lightbox.is-open{ display: flex; }
+
+/* Opened image: cap to website width */
+.lab-lightbox__img{
+  width: 100%;
+  max-width: 1100px;           /* match your site content cap */
+  max-height: 85vh;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
+  background: transparent;
+}
+
+/* Close button stays accessible */
+.lab-lightbox__close{
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  border: 0;
+  background: rgba(255,255,255,.15);
+  color: #fff;
+  font-size: 28px;
+  line-height: 44px;
+  cursor: pointer;
+}
+
+/* Optional: slightly bigger thumbs on larger screens */
+@media (min-width: 900px){
+  .lab-grid{ grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+}

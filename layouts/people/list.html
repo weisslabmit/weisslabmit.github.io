@@ -1,0 +1,78 @@
+{{ define "main" }}
+<section id="people" class="wrapper people-section">
+  <div class="inner">
+
+    <header class="major align-center">
+      <h2>People</h2>
+    </header>
+
+    {{- $roleOrder := slice "PI" "Staff" "PhD students" "Postdocs" "Other" "Undergrads" -}}
+    {{- $people := .Pages -}}
+
+    {{/* 1) PI special layout (single wide row) */}}
+    {{ $pis := where $people ".Params.role" "PI" }}
+    {{ if gt (len $pis) 0 }}
+      {{ range sort $pis "Params.weight" "asc" }}
+        <section class="person-highlight">
+          <div class="photo">
+            <a href="{{ .RelPermalink }}">
+              <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}">
+            </a>
+          </div>
+          <div class="info">
+            <h3 class="name">{{ .Title }}</h3>
+
+         <div class="roleline">PI</div>
+            {{ with .Params.short_bio }}<p class="bio">{{ . }}</p>{{ end }}
+
+
+            <div class="links">
+              {{ with .Params.website }}
+                <a class="btn tiny" href="{{ . }}" target="_blank" rel="noopener">
+                  <span class="icon fa-globe"></span> Website
+                </a>
+              {{ end }}
+              {{ with .Params.scholar }}
+                <a class="btn tiny" href="{{ . }}" target="_blank" rel="noopener">
+                  <span class="icon fa-graduation-cap"></span> Scholar
+                </a>
+              {{ end }}
+              {{ with .Params.github }}
+                <a class="btn tiny" href="{{ . }}" target="_blank" rel="noopener">
+                  <span class="icon brands fa-github"></span> GitHub
+                </a>
+              {{ end }}
+              {{ with .Params.orcid }}
+                <a class="btn tiny" href="{{ . }}" target="_blank" rel="noopener">
+                  <span class="icon fa-id-badge"></span> ORCID
+                </a>
+              {{ end }}
+              {{ with .Params.linkedin }}
+                <a class="btn tiny" href="{{ . }}" target="_blank" rel="noopener">
+                  <span class="icon brands fa-linkedin"></span> LinkedIn
+                </a>
+              {{ end }}
+            </div>
+          </div>
+        </section>
+      {{ end }}
+      <hr class="people-sep">
+    {{ end }}
+
+    {{/* 2) Other roles, in requested order */}}
+    {{ range $roleOrder }}
+      {{ $group := where $people ".Params.role" . }}
+      {{ if gt (len $group) 0 }}
+        <h3 class="people-group-title">{{ . }}</h3>
+        <div class="people-grid">
+          {{ range sort $group "Params.weight" "asc" }}
+            {{ partial "people-card.html" . }}
+          {{ end }}
+        </div>
+        <hr class="people-sep">
+      {{ end }}
+    {{ end }}
+
+  </div>
+</section>
+{{ end }}

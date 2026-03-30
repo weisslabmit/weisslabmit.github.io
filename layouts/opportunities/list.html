@@ -1,0 +1,47 @@
+{{ define "main" }}
+<section id="opportunities" class="opps-page">
+  <!-- Floating back (same style as Alumni/Publications) -->
+  <a href="/" class="back-to-home-btn">Back to Home</a>
+
+  <div class="inner">
+    <header class="major">
+      <h1>Opportunities</h1>
+      <p class="opps-subtitle">Open calls and targeted project announcements from the Weiss Lab.</p>
+    </header>
+
+    {{/* Get all non-draft items, newest first */}}
+    {{ $all := where .RegularPages "Params.draft" "ne" true }}
+    {{ $pages := $all.ByDate.Reverse }}
+
+    {{ if lt (len $pages) 1 }}
+      <p>No active opportunities at the moment.</p>
+    {{ else }}
+      <div class="opps-list">
+        {{ range $p := $pages }}
+          <article class="opportunity-row">
+            <h2 class="opp-title">{{ $p.Title }}</h2>
+
+            <div class="opp-body">
+              {{ $p.Content }}
+            </div>
+
+            {{/* Link preference: external link if provided, else this page link */}}
+            {{ $href := cond (and (isset $p.Params "link") $p.Params.link) $p.Params.link $p.RelPermalink }}
+            <div class="opp-actions">
+              <a class="button opp-link" href="{{ $href }}" {{ if $p.Params.link }}target="_blank" rel="noopener"{{ end }}>
+                Learn more
+              </a>
+            </div>
+          </article>
+        {{ end }}
+      </div>
+    {{ end }}
+
+    <!-- Bottom note (always shown) -->
+    <p class="opps-note">
+  <strong>Note:</strong> Even when there are no open calls, if you’re interested in applying at any level,
+  please email <a href="mailto:rweiss@mit.edu">Ron</a> to explore possibilities and discuss cool science.
+</p>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,129 @@
+{{/* layouts/partials/people-section.html
+     PI rendered OUTSIDE the grid (own row), others stay in grids
+*/}}
+
+{{- define "obf" -}}
+  {{- replace (replace . "@" " (at) ") "." " (dot) " -}}
+{{- end -}}
+
+{{ $allPeople := where site.RegularPages "Section" "people" }}
+
+{{ $labels := dict
+  "PI" "Principal Investigator"
+  "Staff" "Staff"
+  "PhD" "PhD student"
+  "Postdoc" "Postdoc"
+  "Other" "Other"
+  "Undergrad" "Undergrad"
+}}
+
+{{ $headings := dict
+  "PI" "The Boss"
+  "Staff" "Staff"
+  "PhD" "PhD Students"
+  "Postdoc" "Postdocs"
+  "Other" "Other Family Members"
+  "Undergrad" "Undergrads"
+}}
+
+<section id="people" class="people-section">
+  <div class="content">
+
+    {{/* ---- PI: own row, outside any grid ---- */}}
+    {{ $pis := where $allPeople ".Params.role" "PI" }}
+    {{ if gt (len $pis) 0 }}
+      <h2 class="people-heading" style="text-align:center;">{{ index $headings "PI" }}</h2>
+
+      {{ range $pi := ($pis.ByWeight).ByTitle }}
+        <article class="person-card pi-card">
+          <div class="image avatar">
+            {{ with $pi.Params.image }}
+              <img src="{{ . | relURL }}" alt="{{ $pi.Title }}" loading="lazy">
+            {{ else }}
+              <img src="/uploads/placeholder.png" alt="{{ $pi.Title }}" loading="lazy">
+            {{ end }}
+          </div>
+
+          <div class="person-info">
+            <h3><a href="{{ $pi.RelPermalink }}">{{ $pi.Title }}</a></h3>
+
+               <div class="role">{{ index $labels $pi.Params.role | default $pi.Params.role }}</div>
+
+
+            {{ with $pi.Params.co_supervised_by }}
+              <div class="co-supervised">(Co-supervised by {{ . }})</div>
+            {{ end }}
+
+            <div class="person-links">
+              {{ with $pi.Params.website }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="Website">{{ partial "icons/link.svg" . }}</a>{{ end }}
+              {{ with $pi.Params.scholar }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="Google Scholar">{{ partial "icons/scholar.svg" . }}</a>{{ end }}
+              {{ with $pi.Params.github  }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="GitHub">{{ partial "icons/github.svg" . }}</a>{{ end }}
+              {{ with $pi.Params.orcid }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="ORCID">{{ (partial "icons/orcid.svg" .) | safeHTML }}</a>{{ end }}
+              {{ with $pi.Params.linkedin }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="LinkedIn">{{ partial "icons/linkedin.svg" . }}</a>{{ end }}
+              {{ with $pi.Params.email   }}<a href="mailto:{{ . }}" aria-label="Email">{{ partial "icons/email.svg" . }}</a>{{ end }}
+            </div>
+
+            {{ with $pi.Params.short_bio }}
+              <p class="bio">{{ . }}</p>
+            {{ else }}
+              {{ with $pi.Params.bio }}
+                <p class="bio">{{ . }}</p>
+              {{ end }}
+            {{ end }}
+          </div>
+        </article>
+      {{ end }}
+    {{ end }}
+
+    {{/* ---- Non-PI groups in grids ---- */}}
+    {{ $nonPIRoles := slice "Staff" "PhD" "Postdoc" "Other" "Undergrad" }}
+    {{ range $role := $nonPIRoles }}
+      {{ $group := where $allPeople ".Params.role" $role }}
+      {{ if gt (len $group) 0 }}
+        <h2 class="people-heading" style="text-align:center;">{{ index $headings $role }}</h2>
+        <div class="people-grid">
+          {{ range $page := (($group.ByWeight).ByTitle) }}
+            <article class="person-card">
+              <a class="image avatar" href="{{ $page.RelPermalink }}">
+                {{ with $page.Params.image }}
+                  <img src="{{ . | relURL }}" alt="{{ $page.Title }}" loading="lazy">
+                {{ else }}
+                  <img src="/uploads/placeholder.png" alt="{{ $page.Title }}" loading="lazy">
+                {{ end }}
+              </a>
+
+              <h3><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
+
+                <div class="person-subtitle">
+                  {{ if $page.Params.position_detail }}
+                    {{ $page.Params.position_detail }}
+                  {{ else }}
+                    {{ if $page.Params.role }}
+                      {{ index $labels $page.Params.role | default $page.Params.role }}
+                    {{ end }}
+                  {{ end }}
+                </div>
+
+              {{ with $page.Params.co_supervised_by }}
+                <div class="co-supervised">(Co-supervised by {{ . }})</div>
+              {{ end }}
+
+              <div class="person-links">
+                {{ with $page.Params.website  }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="Website">{{ partial "icons/link.svg" . }}</a>{{ end }}
+                {{ with $page.Params.scholar  }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="Google Scholar">{{ partial "icons/scholar.svg" . }}</a>{{ end }}
+                {{ with $page.Params.github   }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="GitHub">{{ partial "icons/github.svg" . }}</a>{{ end }}
+                {{ with $page.Params.orcid    }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="ORCID">{{ partial "icons/orcid.svg" . }}</a>{{ end }}
+                {{ with $page.Params.linkedin }}<a href="{{ . }}" target="_blank" rel="noopener" aria-label="LinkedIn">{{ partial "icons/linkedin.svg" . }}</a>{{ end }}
+                {{ with $page.Params.email    }}<a href="mailto:{{ . }}" aria-label="Email">{{ partial "icons/email.svg" . }}</a>{{ end }}
+              </div>
+            </article>
+          {{ end }}
+        </div>
+      {{ end }}
+    {{ end }}
+
+    <div class="people-alumni-cta">
+      <a class="alumni-btn" href="{{ "alumni/" | relURL }}">Alumni</a>
+    </div>
+  </div>
+</section>

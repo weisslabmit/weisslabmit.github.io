@@ -1,0 +1,98 @@
+{{ define "main" }}
+<article class="person-profile profile-wrap">
+
+  <!-- Floating Back to People button (same style as Alumni) -->
+  <a class="back-to-people-btn" href="{{ "/" | relURL }}#people" aria-label="Back to People">
+    Back to People
+  </a>
+
+  <!-- Left: sticky card -->
+  <aside class="profile-card">
+    <div class="profile-photo">
+      {{ if .Params.image }}
+        <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}">
+      {{ else }}
+        <img src="/uploads/placeholder.png" alt="{{ .Title }}">
+      {{ end }}
+    </div>
+
+    <h1 class="profile-name">{{ .Title }}</h1>
+
+    {{ if .Params.position_detail }}
+      <div class="person-subtitle">{{ .Params.position_detail }}</div>
+    {{ else }}
+      {{ if .Params.role }}
+        <div class="person-subtitle">{{ .Params.role }}</div>
+      {{ end }}
+    {{ end }}
+
+    {{ if .Params.co_supervised_by }}
+      <div class="co-supervised">(Co-supervised by {{ .Params.co_supervised_by }})</div>
+    {{ end }}
+
+    <div class="person-links">
+      {{ if .Params.website  }}<a href="{{ .Params.website  }}" target="_blank" rel="noopener" aria-label="Website">{{ partial "icons/link.svg" .Params.website }}</a>{{ end }}
+      {{ if .Params.scholar  }}<a href="{{ .Params.scholar  }}" target="_blank" rel="noopener" aria-label="Google Scholar">{{ partial "icons/scholar.svg" .Params.scholar }}</a>{{ end }}
+      {{ if .Params.github   }}<a href="{{ .Params.github   }}" target="_blank" rel="noopener" aria-label="GitHub">{{ partial "icons/github.svg" .Params.github }}</a>{{ end }}
+      {{ if .Params.orcid    }}<a href="{{ .Params.orcid    }}" target="_blank" rel="noopener" aria-label="ORCID">{{ partial "icons/orcid.svg" .Params.orcid }}</a>{{ end }}
+      {{ if .Params.linkedin }}<a href="{{ .Params.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn">{{ partial "icons/linkedin.svg" .Params.linkedin }}</a>{{ end }}
+      {{ if .Params.email    }}<a href="mailto:{{ .Params.email }}" aria-label="Email">{{ partial "icons/email.svg" .Params.email }}</a>{{ end }}
+    </div>
+
+    {{ if or .Params.phd_university .Params.phd_date .Params.bs_university .Params.bs_date }}
+      <ul class="profile-meta">
+        {{ if or .Params.phd_university .Params.phd_date }}
+          <li>
+            <span class="k">PhD:</span>
+            <span class="v">
+              {{ if .Params.phd_university }}{{ .Params.phd_university }}{{ end }}
+              {{ if and .Params.phd_university .Params.phd_date }}, {{ end }}
+              {{ if .Params.phd_date }}{{ .Params.phd_date }}{{ end }}
+            </span>
+          </li>
+        {{ end }}
+        {{ if or .Params.bs_university .Params.bs_date }}
+          <li>
+            <span class="k">BS:</span>
+            <span class="v">
+              {{ if .Params.bs_university }}{{ .Params.bs_university }}{{ end }}
+              {{ if and .Params.bs_university .Params.bs_date }}, {{ end }}
+              {{ if .Params.bs_date }}{{ .Params.bs_date }}{{ end }}
+            </span>
+          </li>
+        {{ end }}
+      </ul>
+    {{ end }}
+  </aside>
+
+  <!-- Right: content -->
+  <section class="profile-content">
+    {{ if .Params.short_bio }}
+      <section class="pp-intro">
+        <p>{{ .Params.short_bio }}</p>
+      </section>
+    {{ end }}
+
+    {{ if .Params.experience }}
+      <section class="pp-experience">
+        <h2>Other experience</h2>
+        {{ .Params.experience | markdownify }}
+      </section>
+    {{ end }}
+
+    {{ if .Params.bio }}
+      <section class="pp-bio">
+        <h2>Bio</h2>
+        {{ .Params.bio | markdownify }}
+      </section>
+    {{ end }}
+
+    {{ if .Content }}
+      <section class="pp-content">
+        {{ .Content }}
+      </section>
+    {{ end }}
+  </section>
+
+</article>
+{{ end }}

@@ -1,0 +1,42 @@
+{{/* ========= ALUMNI SECTION PARTIAL ========= */}}
+
+{{- $pages := .Pages -}}
+{{- $cats := slice
+  "Graduate Alumni"
+  "Postdoctoral Alumni"
+  "Undergraduate Alumni"
+  "Other Alumni"
+-}}
+
+<section id="alumni" class="alumni-section">
+  <!-- Floating button (upper-right) -->
+  <a class="back-to-people-btn" href="{{ "/" | relURL }}#people" aria-label="Back to People">Back to People</a>
+
+  <div class="content">
+    <header class="major align-center">
+      <h2>Alumni</h2>
+    </header>
+
+    {{ range $cats }}
+      {{ $cat := . }}
+      {{ $group := where $pages ".Params.alumni_category" $cat }}
+      {{ if gt (len $group) 0 }}
+        <h3 class="alumni-heading">{{ $cat }}</h3>
+        <div class="alumni-grid">
+          {{ range $p := (sort $group "Params.weight" "asc") }}
+            <article class="alumni-card">
+              <div class="image avatar">
+                {{ with $p.Params.image }}
+                  <img src="{{ . | absURL }}" alt="{{ $p.Title }}" loading="lazy">
+                {{ else }}
+                  <img src="{{ "/uploads/alumni/placeholder.png" | absURL }}" alt="{{ $p.Title }}" loading="lazy">
+                {{ end }}
+              </div>
+              <h4 class="alumni-name">{{ $p.Title }}</h4>
+            </article>
+          {{ end }}
+        </div>
+      {{ end }}
+    {{ end }}
+  </div>
+</section>

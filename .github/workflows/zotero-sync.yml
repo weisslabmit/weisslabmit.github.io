@@ -1,0 +1,43 @@
+name: Sync Publications from Zotero
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "25 7 * * 0"  # Sundays 07:25 UTC (~03:25 ET)
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      ZOTERO_GROUP_ID: 6271906
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: pip install requests
+
+      - name: Fetch Zotero library (CSL-JSON)
+        timeout-minutes: 15
+        run: python scripts/fetch_from_zotero.py
+
+      - name: Commit changes (if any)
+        run: |
+          # Stage only the file we expect
+          git add data/publications.zotero.json || true
+
+          # Commit only if something is staged
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore(pubs): update from Zotero [skip ci]"
+            git push
+          fi

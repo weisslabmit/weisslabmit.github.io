@@ -1,0 +1,18 @@
+{{ define "main" }}
+<section id="main" class="wrapper">
+  <div class="inner">
+    <header class="major">
+      <h2>{{ .Title }}</h2>
+      {{ with .Params.summary }}<p>{{ . }}</p>{{ end }}
+    </header>
+
+    {{ with .Params.image }}
+    <span class="image fit"><img src="{{ . | relURL }}" alt="{{ $.Title }}"></span>
+    {{ end }}
+
+    <div class="content">
+      {{ .Content }}
+    </div>
+  </div>
+</section>
+{{ end }}

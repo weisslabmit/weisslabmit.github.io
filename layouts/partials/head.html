@@ -1,0 +1,39 @@
+<head>
+  <meta charset="utf-8" />
+  <title>{{ site.Title }}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <!-- Adobe Fonts (your kit) -->
+  <link rel="stylesheet" href="https://use.typekit.net/qyd0ftr.css">
+
+  <!-- Theme CSS (compiled) -->
+  {{ if hugo.IsServer }}
+    {{ $main := resources.Get "sass/main.scss" | resources.ExecuteAsTemplate "scss/main.scss" . | toCSS (dict "targetPath" "css/main.css" "outputStyle" "compressed" "enableSourceMap" false) }}
+    <link rel="stylesheet" href="{{ $main.RelPermalink }}">
+    {{ $noscript := resources.Get "sass/noscript.scss" | resources.ExecuteAsTemplate "noscript.scss" . | toCSS (dict "targetPath" "css/noscript.css" "enableSourceMap" false) }}
+    <noscript><link rel="stylesheet" href="{{ $noscript.RelPermalink }}" /></noscript>
+  {{ else }}
+    {{ $main := resources.Get "sass/main.scss" | resources.ExecuteAsTemplate "scss/main.scss" . | toCSS (dict "targetPath" "css/main.css" "enableSourceMap" false) | minify }}
+    <link rel="stylesheet" href="{{ $main.RelPermalink }}">
+    {{ $noscript := resources.Get "sass/noscript.scss" | resources.ExecuteAsTemplate "noscript.scss" . | toCSS (dict "targetPath" "css/noscript.css" "enableSourceMap" false) | minify }}
+    <noscript><link rel="stylesheet" href="{{ $noscript.RelPermalink }}" /></noscript>
+  {{ end }}
+  
+
+  <!-- FontAwesome (if configured) -->
+  {{ range .Site.Params.asset.fontawesome_css -}}
+    <link rel="stylesheet" href="{{ . | absURL }}">
+  {{- end }}
+
+  <!-- Your overrides LAST -->
+  <link rel="stylesheet" href="{{ "css/custom.css" | relURL }}?v={{ now.Unix }}">
+
+{{- $tl := "embeds/timeline-lab/index.html" | relURL -}}
+<!-- Preconnect is cheap; harmless even on same-origin -->
+<link rel="preconnect" href="{{ $tl }}">
+
+<!-- Warm the cache as early as possible -->
+<link rel="preload"  href="{{ $tl }}" as="document" fetchpriority="low">
+<link rel="prefetch" href="{{ $tl }}" as="document">
+  
+</head>

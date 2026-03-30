@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: weisslabmit/lab-website
+  repo: weisslabmit/weisslabmit.github.io
   branch: main
   base_url: https://weisslab-cms-oauth.onrender.com
   auth_endpoint: /auth

@@ -1,6 +1,6 @@
 ---
 title: Sophia Yang
-role: Other
+role: PhD
 position_detail: Chemical Engineering
 co_supervised_by: (Rotation student)
 scholar: https://scholar.google.com/citations?hl=en&user=LJ4tZMgAAAAJ

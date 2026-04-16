@@ -2,7 +2,7 @@
 draft: false
 title: Jonathan Babb
 role: Staff
-position_detail: Research Associate
+position_detail: Research Scientist
 image: /uploads/jonathan-babb.jpg
 phd_university: Massachusetts Instittute of Technolgy
 phd_date: "2001"

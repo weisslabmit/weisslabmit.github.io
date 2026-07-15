@@ -1,8 +1,8 @@
 ---
 title: Liad Elmelech
 role: PhD
-position_detail: Biological Engineering
-co_supervised_by: (Rotation student)
+position_detail: Biological Engineering (Rotation student)
+co_supervised_by: ""
 email: liad_e@mit.edu
 scholar: https://scholar.google.com/citations?user=r6-iaN4AAAAJ&hl=en
 orcid: https://orcid.org/0009-0002-3564-6533

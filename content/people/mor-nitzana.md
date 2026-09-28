@@ -1,5 +1,5 @@
 ---
-title: Mor Nitzana
+title: Mor Nitzan
 role: Other
 position_detail: Visiting Scientist
 email: mor.nitzan@mail.huji.ac.il
